@@ -6,13 +6,22 @@ async function main() {
     const app: Express = express();
     const port = 3000;
 
-    app.get('/', (req: Request, res: Response) => {
+    // http://localhost:3000/top-influencer
+    app.get('/top-influencer', (req: Request, res: Response) => {
         db.serialize(() => {
-            db.get("select * from influencers", (err: Error, row: any) => {
-                console.log(row);
+            db.get(`Select \`Influencer insta name\` as username,
+                           cast(
+                                   replace(replace(replace(Followers, '.', ''), 'M', '0000'), 'K', '000' as INTEGER) as no_followers
+                                   from influencers
+                                   order by no_followers desc 
+                                   LIMIT 1;`, (err: Error, row: any) => {
+                res.send({
+                    "username": row["username"],
+                    "followers": row["no_followers"]
+                });
             });
         });
-    })
+    });
 
     app.listen(port, () => {
         console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
