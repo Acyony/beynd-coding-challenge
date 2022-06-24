@@ -26,6 +26,8 @@ async function main() {
     // http://localhost:3000/top-influencer-per-category?category=Lifestyle
     app.get('/top-influencer-per-category', (req: Request, res: Response) => {
         let category = req.query['category'];
+        let decodedCategory = decodeURIComponent(category)
+        console.log(decodedCategory)
         db.serialize(() => {
             db.get(`Select \`Influencer insta name\` as username,
                            cast(
@@ -34,8 +36,7 @@ async function main() {
                     from influencers
                     WHERE category_1 = ?
                        or category_2 = ?
-                    order by no_followers desc
-                        LIMIT 1;`, category, category, (err: Error, row: any) => {
+                    order by no_followers desc LIMIT 1;`, category, category, (err: Error, row: any) => {
                 res.send({
                     "username": row["username"],
                     "followers": row["no_followers"]

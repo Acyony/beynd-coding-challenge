@@ -30,7 +30,8 @@ async function getTopInfluencer() {
 
 
 async function getTopInfluencerInCategory(category: string) {
-    let encodeQuery = encodeURI(category)
+    let encodeQuery = encodeURIComponent(category)
+    console.log(encodeQuery)
     let response = await axios.get(`http://localhost:3000/top-influencer-per-category?category=${encodeQuery}`);
     return new Promise((resolve) => {
         resolve(`${response.data["username"]} with ${response.data["followers"]} followers`);
