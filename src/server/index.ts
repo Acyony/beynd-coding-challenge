@@ -11,17 +11,18 @@ async function main() {
         db.serialize(() => {
             db.get(`Select \`Influencer insta name\` as username,
                            cast(
-                                   replace(replace(replace(Followers, '.', ''), 'M', '0000'), 'K', '000' as INTEGER) as no_followers
-                                   from influencers
-                                   order by no_followers desc 
-                                   LIMIT 1;`, (err: Error, row: any) => {
+                                   replace(replace(replace(Followers, '.', ''), 'M', '0000'), 'K', '000')
+                               as INTEGER)           as no_followers
+                    from influencers
+                    order by no_followers desc
+                    LIMIT 1;`, (err: Error, row: any) => {
                 res.send({
                     "username": row["username"],
                     "followers": row["no_followers"]
                 });
             });
         });
-    });
+    })
 
     app.listen(port, () => {
         console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
